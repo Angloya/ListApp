@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">ListApp</router-link>
+      <router-link to="/list">List</router-link>
     </div>
     <router-view/>
   </div>
