@@ -1,28 +1,28 @@
 <template>
- <div class="addNewTask">
+  <div class="addNewTask">
     <h3 v-if="!addNewTask">Чтобы добавить новую задачy</h3>
     <h3 v-if="addNewTask">Если передумал</h3>
-  <h1 class="cursor" @click="addNewTask = !addNewTask">Нажми</h1>
-   <transition name="fade">
-<form v-if="addNewTask" class='addNewTask'>
-      <label> Название
-      <input type="text"
-        class="addTask"
-        required v-model="title"
-        maxlength="40"
-        minlength="3">
-        </label>
-        <label class="addTask"> Ваша Задача
-      <textarea type="text"
-        class="addTask"
-        required v-model="item"
-        maxlength="1000"
-        minlength="3"/>
-        </label>
-      <h3 class="cursor" @click="addTask">Добавить</h3>
-    </form>
-   </transition>
-    </div>
+    <h1 class="cursor" @click="addNewTask = !addNewTask">Нажми</h1>
+    <transition name="fade">
+      <form v-if="addNewTask" class='addNewTask'>
+        <label> Название
+        <input type="text"
+          class="addTask"
+          required v-model="title"
+          maxlength="40"
+          minlength="3">
+          </label>
+          <label class="addTask"> Ваша Задача
+        <textarea type="text"
+          class="addTask"
+          required v-model="item"
+          maxlength="1000"
+          minlength="3"/>
+          </label>
+        <h3 class="cursor" @click="addTask">Добавить</h3>
+      </form>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -57,6 +57,11 @@ input, textarea {
   display: flex;
   align-items: center;
   justify-content: center
+}
+@media screen and (max-width: 600px) {
+.addNewTask form{
+  flex-direction: column;
+}
 }
 textarea {
    vertical-align: middle;

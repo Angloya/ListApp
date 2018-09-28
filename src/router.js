@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import listApp from './views/ListApp.vue'
-import listDragColumn from './views/listDragColumn.vue'
+import listDragColumn from './views/listDrag.vue'
 Vue.use(Router)
 
 export default new Router({

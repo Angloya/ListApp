@@ -1,85 +1,55 @@
 <template>
   <div class="holder">
-  <h1 class="top">Список задач</h1>
-  <div class="AddInfo">
-    <input-task
-    @addTask="addTask"/>
-    <input-column
-     @addColumn="addColumn"/>
-     </div>
+    <h1 class="top">Список задач</h1>
+    <div class="AddInfo">
+      <input-task @addTask="addTask" />
+      <input-column @addColumn="addColumn" />
+    </div>
     <div>
-      <Container
-        orientation="horizontal"
-        class="container-main"
-        @drop="onDropMain" :get-child-payload="getChildPayload2">
-          <Draggable class="column"
-          v-for="(col, index) in main"
-          :key="col.id"
-          :class="col.class"
-          v-rainbow>
+      <Container :orientation= view class="container-main" @drop="onDropMain" :get-child-payload="getChildPayload2">
+        <Draggable class="column" v-for="(col, index) in main" :key="col.id" :class="col.class" v-rainbow>
           <div class="columnTitle">
-              <img src="../assets/remove.png"
-              alt="" class="removeAll cursor"
-              v-on:click="removeColumn(col.name, index)">
-              <h1>{{col.name}}</h1>
-              </div>
-              <Container class="container"
-              :group-name="'item'"
-              :get-child-payload="getChildPayload(col.id)"
-              @drop="onDrop(index, 'items', $event)">
-                <Draggable :class="{modalMask: item.showModal,'draggable-item': !item.showModal}"
-                v-border
-                v-rainbow
-                v-for="(item, index) in col.items"
-                :key="index"
-                v-if="col.items.length"
-                >
-                <transition name="modal">
-                    <div class="draggableGrid" :class="item.class" @dblclick="showModalOpen(col.id, index)">
-                      <h2 title="Кликните два раза по названию чтобы отредактировать его"
-                      @dblclick="changeTask(col.id, index, 'title')">
-                      {{item.title}}</h2>
-                       <p title="Кликните два раза по содержанию чтобы отредактировать его"
-                       @dblclick="changeTask(col.id, index, 'data')">
-                       {{item.data}}</p>
-                          <transition name="fade">
-                        <div class="change" v-if='item.changeTitle || item.changeTask'>
-                          <form>
-                             <input type="text"
-                          class="addTask"
-                          v-if='item.changeTitle'
-                          required v-model="title"
-                          maxlength="40"
-                          minlength="3"
-                          v-focus
-                          @blur="onBlur(col.id, index, 'title')">
-                         <textarea type="text"
-                          class="addTask"
-                          v-if='item.changeTask'
-                          required v-model="task"
-                          maxlength="1000"
-                          minlength="3"
-                          v-focus
-                          @blur="onBlur(col.id, index, 'data')"/>
-        <h3 class="cursor" @click="changeData(col.id, index, 'data')">Сохранить</h3>
-        </form>
-        </div>
-                          </transition>
-                        <img src="../assets/remove.png" alt="" v-if="!item.showModal" class="removeAll cursor" v-on:click="remove(col.id, index)">
-                        <img src="../assets/remove.png" alt="" @click="showModalClose(col.id, index)" v-if="item.showModal" class="removeAll cursor">
+            <img src="../../assets/remove.png" alt="" class="removeAll cursor" v-on:click="removeColumn(col.name, index)">
+            <h1>{{col.name}}</h1>
+          </div>
+          <Container class="container" :group-name="'item'" :get-child-payload="getChildPayload(col.id)" @drop="onDrop(index, 'items', $event)">
+            <Draggable :class="{modalMask: item.showModal,'draggable-item': !item.showModal}" v-border v-rainbow v-for="(item, index) in col.items" :key="index" v-if="col.items.length">
+              <transition name="modal">
+                <div class="draggableGrid" :class="item.class" @dblclick="showModalOpen(col.id, index)">
+                  <h2 title="Кликните два раза по названию чтобы отредактировать его"
+                  @dblclick="changeTask(col.id, index, 'title')">
+                      {{item.title}}
+                  </h2>
+                  <p title="Кликните два раза по содержанию чтобы отредактировать его"
+                  @dblclick="changeTask(col.id, index, 'data')">
+                    {{item.data}}</p>
+                    <transition name="fade">
+                      <div class="change" v-if='item.changeTitle || item.changeTask'>
+                        <form>
+                          <input type="text" class="addTask" v-if='item.changeTitle' required v-model="title" maxlength="40" minlength="3" v-focus @blur="onBlur(col.id, index, 'title')">
+                          <textarea type="text" class="addTask" v-if='item.changeTask' required v-model="task" maxlength="1000" minlength="3" v-focus @blur="onBlur(col.id, index, 'data')" />
+                          <h3 class="cursor" @click="changeData(col.id, index, 'data')">Сохранить</h3>
+                        </form>
                     </div>
-  </transition>
-                </Draggable>
-     </Container>
-      </Draggable>
-    </Container>
-            </div>
-        </div>
+                  </transition>
+                  <div class="imgChange">
+                    <img src="../../assets/remove.png" alt="" v-if="!item.showModal" class="removeAll cursor" v-on:click="remove(col.id, index)">
+                    <img src="../../assets/edit.png" alt="" @click="changeTask(col.id, index, 'data')" class="removeAll cursor">
+                    <img src="../../assets/remove.png" alt="" @click="showModalClose(col.id, index)" v-if="item.showModal" class="removeAll cursor">
+                  </div>
+                </div>
+              </transition>
+            </Draggable>
+          </Container>
+        </Draggable>
+      </Container>
+    </div>
+</div>
 </template>
 
 <script>
-import inputColumn from '@/components/listDrag/inputColumn.vue'
-import inputTask from '@/components/listDrag/inputTask.vue'
+import inputColumn from './inputColumn.vue'
+import inputTask from './inputTask.vue'
 import { Container, Draggable } from 'vue-smooth-dnd'
 import { applyDrag } from '@/utils.js'
 
@@ -90,6 +60,9 @@ export default {
     inputColumn,
     Container,
     Draggable
+  },
+  props: {
+    view: String
   },
   data () {
     return {
@@ -248,8 +221,8 @@ export default {
   margin-bottom: -50px;
 }
 .Highlights {
-    background: rgba(238, 121, 121, 0.6) !important;
-    min-height: 200px;
+  background: rgba(238, 121, 121, 0.6) !important;
+  min-height: 200px;
 }
 .Active {
   background: rgba(139, 250, 148, 0.6) !important;
@@ -261,7 +234,7 @@ export default {
   background: rgba(118, 239, 255, 0.6) !important;
 }
 .AddInfo {
-  margin-top: -50px;
+  margin-top: -30px;
   display: flex;
   justify-content:space-around
 }
@@ -312,19 +285,19 @@ export default {
   max-width: 400px;
   word-wrap: break-word;
   box-sizing: border-box;
-   background-clip: border-box;
+  background-clip: border-box;
 }
 .draggableGrid {
-   display: grid;
-   max-width: 300px;
-   min-width: 200px;
-   grid-template-columns: repeat(3, 30%);;
-   grid-template-rows: repeat(4, 20%);
-   grid-template-areas:
-   "h2 h2 h2 img"
-   "p p p p"
-   "p p p p"
-   "form form form form"
+  display: grid;
+  max-width: 300px;
+  min-width: 200px;
+  grid-template-columns: repeat(3, 30%);;
+  grid-template-rows: repeat(4, 20%);
+  grid-template-areas:
+  "h2 h2 h2 img"
+  "p p p p"
+  "p p p p"
+  "form form form form"
 
 }
 .draggable-item h2 {
@@ -348,17 +321,17 @@ export default {
   min-width: 200px;
   font-family: 'Neucha', cursive;
 }
-.draggable-item img {
+.draggable-item .imgChange {
   grid-area: img
 }
 .Done .draggable-item {
   background: rgba(49, 179, 107, 0.568) !important;
 }
 .Done p{
-    text-decoration: line-through
+  text-decoration: line-through
 }
 .Done h2{
-    text-decoration: line-through
+  text-decoration: line-through
 }
 input, textarea {
   border: 1px solid black;
@@ -377,7 +350,7 @@ input, textarea {
   font-family: 'Neucha', cursive;
   background-color: rgba(0, 0, 0, .9);
   transition: opacity .3s ease;
-   display: flex !important;
+  display: flex !important;
   align-items: center
 }
 .modalMask .draggableGrid {
@@ -405,5 +378,16 @@ input, textarea {
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
+}
+
+@media screen and (max-width: 600px) {
+.container-main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  -webkit-box-orient: vertical !important;
+}
 }
 </style>

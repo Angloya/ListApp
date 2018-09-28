@@ -1,20 +1,20 @@
 <template>
-<div class="holder">
-  <h1>List</h1>
-  <form @submit.prevent="addProduct">
-  <input type="text" class="heh" placeholder="Enter a products you have.." required v-model="product" maxlength="40" minlength="3">
-  <img src="../assets/remove.png" alt="" class="removeAll" v-on:click="removeAll">
-  </form>
+  <div class="holder">
+    <h1>List</h1>
+    <form @submit.prevent="addProduct">
+        <input type="text" class="heh" placeholder="Enter a products you have.." required v-model="product" maxlength="40" minlength="3">
+        <img src="../assets/remove.png" alt="" class="removeAll" v-on:click="removeAll">
+    </form>
     <ul>
-      <template v-for="(product, index) in products">
-      <listActive :key='index'
-        :product="product"
-        :index="index"
-        @removeClick="remove"
-        @listClick="active"/>
-      </template>
-        </ul>
-        </div>
+        <template v-for="(product, index) in products">
+  <listActive :key='index'
+    :product="product"
+    :index="index"
+    @removeClick="remove"
+    @listClick="active"/>
+  </template>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -86,7 +86,8 @@ h1{
   color: black;
 }
 input{
-    width: 600px;
+    max-width: 600px;
+    min-width: 250px;
     height: 50px;
     font-family: 'Open Sans Condensed', sans-serif;
     font-weight: 300;

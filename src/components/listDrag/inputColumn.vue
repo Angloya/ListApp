@@ -3,18 +3,18 @@
     <h3 v-if="!addNewColumn">Чтобы добавить новую колонку</h3>
     <h3 v-if="addNewColumn">Если передумал</h3>
     <h1 class="cursor" @click="addNewColumn = !addNewColumn">Нажми</h1>
-     <transition name="fade">
-<form v-if="addNewColumn" class='addNewTask'>
-      <label> Название
-      <input type="text"
-      class="heh"
-      required v-model="columnName"
-      maxlength="40"
-      minlength="3">
+    <transition name="fade">
+      <form v-if="addNewColumn" class='addNewTask'>
+        <label> Название
+        <input type="text"
+        class="heh"
+        required v-model="columnName"
+        maxlength="40"
+        minlength="3">
         </label>
-      <h3 class="cursor" @click="addColumn">Добавить</h3>
-    </form>
-     </transition>
+        <h3 class="cursor" @click="addColumn">Добавить</h3>
+      </form>
+    </transition>
   </div>
 </template>
 
@@ -46,5 +46,10 @@ input, textarea {
 }
 form {
   display: flex
+}
+@media screen and (max-width: 600px) {
+form {
+  flex-direction: column
+}
 }
 </style>
