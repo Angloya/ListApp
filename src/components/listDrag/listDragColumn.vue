@@ -1,12 +1,13 @@
 <template>
-  <div class="holder">
+<div>
+  <div v-if="!loading" class="holder">
     <h1 class="top">Список задач</h1>
     <div class="AddInfo">
       <input-task @addTask="addTask" />
       <input-column @addColumn="addColumn" />
     </div>
     <div>
-      <Container :orientation= view class="container-main" @drop="onDropMain" :get-child-payload="getChildPayload2">
+      <Container :orientation = view class="container-main" @drop="onDropMain" :get-child-payload="getChildPayload2">
         <Draggable class="column" v-for="(col, index) in main" :key="col.id" :class="col.class" v-rainbow>
           <div class="columnTitle">
             <img src="../../assets/remove.png" alt="" class="removeAll cursor" v-on:click="removeColumn(col.name, index)">
@@ -45,6 +46,10 @@
       </Container>
     </div>
 </div>
+<div v-if="loading">
+  <h1>Loading...</h1>
+</div>
+</div>
 </template>
 
 <script>
@@ -67,6 +72,7 @@ export default {
   data () {
     return {
       task: '',
+      loading: false,
       addNewColumn: false,
       title: '',
       main: [
@@ -90,12 +96,30 @@ export default {
     }
   },
   mounted () {
-    if (localStorage.length > 0) {
+    if (localStorage.length > 0 && !this.user) {
       try {
         this.main = JSON.parse(localStorage.getItem('main'))
       } catch (e) {
         localStorage.removeItem('items')
       }
+      this.loading = false
+    } else if (this.user) {
+      this.loading = true
+      this.$store.dispatch('getTasks')
+      setTimeout(() => {
+        this.getTask()
+        this.loading = false
+      }, 1000)
+    } else {
+      console.log('Данные созданы')
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    tasks () {
+      return this.$store.state.tasks
     }
   },
   directives: {
@@ -107,6 +131,20 @@ export default {
     }
   },
   methods: {
+    getTask () {
+      if (!this.tasks) {
+        if (localStorage.length > 1) {
+          try {
+            this.main = JSON.parse(localStorage.getItem('main'))
+          } catch (e) {
+            localStorage.removeItem('items')
+          }
+        }
+      } else {
+        this.main = this.tasks.data
+      }
+      this.loading = false
+    },
     showModalClose (column, id) {
       this.main.filter(p => p.id === column)[0].items[id].showModal = !this.main.filter(p => p.id === column)[0].items[id].showModal
       this.saveitems()
@@ -188,8 +226,15 @@ export default {
       this.saveitems()
     },
     saveitems () {
-      for (var x = 0; x < this.main.length; ++x) {
-        localStorage.setItem('main', JSON.stringify(this.main))
+      if (localStorage.length > 0 && !this.user) {
+        for (var x = 0; x < this.main.length; ++x) {
+          localStorage.setItem('main', JSON.stringify(this.main))
+        }
+      } else {
+        this.$store.dispatch('addTasks', this.main)
+        for (x = 0; x < this.main.length; ++x) {
+          localStorage.setItem('main', JSON.stringify(this.main))
+        }
       }
     },
     onDrop (id, collection, dropResult) {

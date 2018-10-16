@@ -1,12 +1,18 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Список Задач          |</router-link>
-      <router-link to="/list">        List</router-link>
-    </div>
+    <headerPanel class="headerPanel"/>
     <router-view/>
   </div>
 </template>
+
+<script>
+import headerPanel from '@/components/headerPanel.vue'
+export default {
+  components: {
+    headerPanel
+  }
+}
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Neucha&subset=cyrillic');
@@ -16,7 +22,8 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  width: 100%
+  width: 100%;
+  position: relative;
 }
 body::-webkit-scrollbar {
     width: 4px;
@@ -34,6 +41,20 @@ body::-webkit-scrollbar:horizontal {
     width: 4px;
     background: #c4c4c4;
 }
+input, textarea {
+  border: 1px solid black;
+  border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+  min-height: 40px;
+  padding: 10px;
+  margin: 5px;
+}
+button {
+  border: 1px solid black;
+  border-radius: 255px 25px 225px 25px/25px 225px 25px 255px;
+  min-height: 20px;
+  padding: 10px;
+  margin: 5px;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .9s;
 }
@@ -42,6 +63,10 @@ body::-webkit-scrollbar:horizontal {
 }
 #nav {
   padding: 10px;
+  position: sticky;
+  top: 0px;
+  background: #fff;
+  z-index: 1000
 }
 .cursor {
   cursor: pointer;
@@ -49,10 +74,10 @@ body::-webkit-scrollbar:horizontal {
 #nav a {
   font-weight: bold;
   color: #2c3e50;
-  font-size: 26px
+  font-size: 26px;
+  text-decoration: none
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+#nav img.router-link-exact-active {
+  background: none;
 }
 </style>
