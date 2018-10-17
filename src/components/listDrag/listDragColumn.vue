@@ -106,10 +106,11 @@ export default {
     } else if (this.user) {
       this.loading = true
       this.$store.dispatch('getTasks')
-      setTimeout(() => {
+      var time = setTimeout(() => {
         this.getTask()
         this.loading = false
       }, 1000)
+      clearTimeout(time)
     } else {
       console.log('Данные созданы')
     }
