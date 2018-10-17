@@ -137,7 +137,12 @@ export default {
       if (!this.tasks) {
         if (localStorage.length > 1) {
           try {
-            this.main = JSON.parse(localStorage.getItem('main'))
+            debugger
+            if (localStorage.getItem('main')) {
+              this.main = JSON.parse(localStorage.getItem('main'))
+            } else {
+              return this.main
+            }
           } catch (e) {
             localStorage.removeItem('items')
           }

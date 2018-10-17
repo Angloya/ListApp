@@ -16,7 +16,6 @@ fb.auth.onAuthStateChanged(user => {
       created () {
         if (user) {
           this.$store.dispatch('autoSignIn', user)
-          this.$store.dispatch('fetchUserData', user)
         }
       },
       render: h => h(App)
