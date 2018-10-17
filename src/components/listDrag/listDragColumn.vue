@@ -72,6 +72,7 @@ export default {
   data () {
     return {
       task: '',
+      time: '',
       loading: false,
       addNewColumn: false,
       title: '',
@@ -96,6 +97,7 @@ export default {
     }
   },
   mounted () {
+    debugger
     if (localStorage.length > 0 && !this.user) {
       try {
         this.main = JSON.parse(localStorage.getItem('main'))
@@ -106,11 +108,10 @@ export default {
     } else if (this.user) {
       this.loading = true
       this.$store.dispatch('getTasks')
-      var time = setTimeout(() => {
+      this.time = setTimeout(() => {
         this.getTask()
         this.loading = false
       }, 1000)
-      clearTimeout(time)
     } else {
       console.log('Данные созданы')
     }
@@ -145,6 +146,7 @@ export default {
         this.main = this.tasks.data
       }
       this.loading = false
+      clearTimeout(this.time)
     },
     showModalClose (column, id) {
       this.main.filter(p => p.id === column)[0].items[id].showModal = !this.main.filter(p => p.id === column)[0].items[id].showModal
