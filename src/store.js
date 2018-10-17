@@ -168,6 +168,7 @@ export default new Vuex.Store({
     },
     addTasks ({ commit, state }, data) {
       firebase.firestore().collection('UsersTasks').doc(state.user.id).set({
+        user: state.user.email,
         data
       })
         .then(() => {
