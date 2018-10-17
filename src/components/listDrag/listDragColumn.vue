@@ -97,7 +97,6 @@ export default {
     }
   },
   mounted () {
-    debugger
     if (localStorage.length > 0 && !this.user) {
       try {
         this.main = JSON.parse(localStorage.getItem('main'))
@@ -137,7 +136,6 @@ export default {
       if (!this.tasks) {
         if (localStorage.length > 1) {
           try {
-            debugger
             if (localStorage.getItem('main')) {
               this.main = JSON.parse(localStorage.getItem('main'))
             } else {
