@@ -36,7 +36,7 @@
                   <div class="imgChange">
                     <img src="../../assets/remove.png" alt="" v-if="!item.showModal" class="removeAll cursor" v-on:click="remove(col.id, index)">
                     <img src="../../assets/edit.png" alt="" @click="changeTask(col.id, index, 'data')" class="removeAll cursor">
-                    <img src="../../assets/remove.png" alt="" @click="showModalClose(col.id, index)" v-if="item.showModal" class="removeAll cursor">
+                    <img src="../../assets/remove.png" alt="" @click="showModalClose" v-if="item.showModal" class="removeAll cursor">
                   </div>
                 </div>
               </transition>
@@ -73,50 +73,26 @@ export default {
     return {
       task: '',
       time: '',
-      loading: false,
       addNewColumn: false,
       title: '',
-      main: [
-        { id: 'column0',
-          name: 'New task',
-          class: 'newTask',
-          items: []},
-        { id: 'column1',
-          name: 'Highlights',
-          class: 'Highlights',
-          items: []},
-        { id: 'column2',
-          name: 'Active',
-          class: 'Active',
-          items: []},
-        { id: 'column3',
-          name: 'Done',
-          class: 'Done',
-          items: []}
-      ]
+      main: null,
+      openModal: null
     }
   },
   mounted () {
-    if (localStorage.length > 0 && !this.user) {
-      this.getTaskLocalStorage()
-      this.loading = false
-    } else if (this.user) {
-      this.loading = true
-      this.$store.dispatch('getTasks')
-      this.time = setTimeout(() => {
-        this.getTask()
-        this.loading = false
-      }, 1000)
-    } else {
-      console.log('Данные созданы')
-    }
+    this.$store.dispatch('getTasks').then(() => {
+      this.main = this.tasks
+    })
   },
   computed: {
     user () {
       return this.$store.getters.user
     },
     tasks () {
-      return this.$store.state.tasks
+      return this.$store.state.main
+    },
+    loading () {
+      return this.$store.state.loading
     }
   },
   directives: {
@@ -128,34 +104,12 @@ export default {
     }
   },
   methods: {
-    getTask () {
-      if (!this.tasks) {
-        if (localStorage.length > 1) {
-          this.getTaskLocalStorage()
-        }
-      } else {
-        this.main = this.tasks.data
-      }
-      this.loading = false
-      clearTimeout(this.time)
-    },
-    getTaskLocalStorage () {
-      try {
-        if (localStorage.getItem('main')) {
-          this.main = JSON.parse(localStorage.getItem('main'))
-        } else {
-          return this.main
-        }
-      } catch (e) {
-        localStorage.removeItem('main')
-      }
-    },
-    showModalClose (column, id) {
-      this.main.filter(p => p.id === column)[0].items[id].showModal = !this.main.filter(p => p.id === column)[0].items[id].showModal
-      this.saveitems()
+    showModalClose () {
+      this.openModal.showModal = false
     },
     showModalOpen (column, id) {
       this.main.filter(p => p.id === column)[0].items[id].showModal = true
+      this.openModal = this.main.filter(p => p.id === column)[0].items[id]
     },
     changeTask (column, id, item) {
       if (item === 'data') {
