@@ -98,11 +98,7 @@ export default {
   },
   mounted () {
     if (localStorage.length > 0 && !this.user) {
-      try {
-        this.main = JSON.parse(localStorage.getItem('main'))
-      } catch (e) {
-        localStorage.removeItem('items')
-      }
+      this.getTaskLocalStorage()
       this.loading = false
     } else if (this.user) {
       this.loading = true
@@ -135,21 +131,24 @@ export default {
     getTask () {
       if (!this.tasks) {
         if (localStorage.length > 1) {
-          try {
-            if (localStorage.getItem('main')) {
-              this.main = JSON.parse(localStorage.getItem('main'))
-            } else {
-              return this.main
-            }
-          } catch (e) {
-            localStorage.removeItem('items')
-          }
+          this.getTaskLocalStorage()
         }
       } else {
         this.main = this.tasks.data
       }
       this.loading = false
       clearTimeout(this.time)
+    },
+    getTaskLocalStorage () {
+      try {
+        if (localStorage.getItem('main')) {
+          this.main = JSON.parse(localStorage.getItem('main'))
+        } else {
+          return this.main
+        }
+      } catch (e) {
+        localStorage.removeItem('main')
+      }
     },
     showModalClose (column, id) {
       this.main.filter(p => p.id === column)[0].items[id].showModal = !this.main.filter(p => p.id === column)[0].items[id].showModal
